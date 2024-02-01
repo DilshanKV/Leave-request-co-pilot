@@ -6,6 +6,7 @@ import pandas as pd
 # from credentials import GOOGLE_API_KEY,reporting_person
 import requests
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -148,7 +149,9 @@ If any information is missing or unclear,just ask to provide the missing informa
 If the dates are invalid or the reason is too vague, ask for clarification.
 VERY IMPORTANT: Make sure you Do not make up or guess ANY extra information. 
 Only extract what exactly is in the user request.
-You respond in a short, very conversational friendly style."""
+You respond in a short, very conversational friendly style.
+
+once you create the jason ask you to save the leave request.To do that ask user to type 'SAVE'."""
 
 history = [
   {
@@ -214,9 +217,35 @@ if prompt := st.chat_input("I am your leave request co-pilot. How may I assit yo
     # Display user's last message
     st.chat_message("user").markdown(prompt)
     
-    # Send user entry to Gemini and read the response
-    response = st.session_state.chat.send_message(prompt)
-    
-    # Display last 
-    with st.chat_message("assistant"):
-        st.markdown(response.text)
+    if prompt == 'SAVE':
+        final_message = st.session_state.chat.history[-1]
+        input_string = final_message.parts[0].text
+
+        # Extract JSON data from the string
+        json_start = input_string.find('{')
+        json_end = input_string.rfind('}')
+        json_data = input_string[json_start:json_end + 1]
+
+            # Load JSON data into a Python dictionary
+        leave_data_row = json.loads(json_data)
+
+        # Additional data
+        leave_data_row['Leave ID'] = leave_data.shape[0]+1  # Replace with an appropriate leave ID
+        leave_data_row['Employee ID'] = employee_id  # Replace with an appropriate employee ID
+
+            # Create a Pandas DataFrame
+        df = pd.DataFrame([leave_data_row])
+
+            # Save the DataFrame to a CSV file
+        csv_filename = 'leave_request.csv'
+        df.to_csv(csv_filename, index=False)
+
+        st.success(f'\nDataFrame saved to {csv_filename}.')
+
+    else:
+      # Send user entry to Gemini and read the response
+      response = st.session_state.chat.send_message(prompt)
+      
+      # Display last 
+      with st.chat_message("assistant"):
+          st.markdown(response.text)
