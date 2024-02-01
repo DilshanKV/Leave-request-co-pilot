@@ -197,6 +197,13 @@ st.subheader('I am your leave request co-pilot')
 st.success(text_insights)
 # st.chat_message("assistant").markdown("Hi, How may I assit with you today?")
 
+prompt_parts = [
+  f"{text_insights} give some recommendations using this context.summarize those recommendations for 5-10 points.",
+]
+
+response = model.generate_content(prompt_parts)
+st.success(response.text)
+
 # # Display chat messages from history above current input box
 for message in st.session_state.chat.history[7:]:
     with st.chat_message(role_to_streamlit(message.role)):
