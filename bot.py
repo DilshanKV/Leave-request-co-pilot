@@ -169,7 +169,7 @@ history = [
   },
   {
     "role": "user",
-    "parts": [f'{text_insights}.These are the leave details belongs to {employee_id}']
+    "parts": [f'{text_insights}.These are the leave details belongs to employee_id{employee_id}']
   },
   {
     "role": "model",
