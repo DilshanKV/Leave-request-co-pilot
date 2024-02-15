@@ -21,7 +21,7 @@ def validate_employee(employee_id, name):
 
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('login2.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -34,7 +34,7 @@ def submit():
 
     if not validate_employee(employee_id, name):
         error = "Invalid Employee ID or Name. Please enter correct values."
-        return render_template('login.html',error=error)
+        return render_template('login2.html', error=error)
 
     user_details = {"Employee ID": employee_id, "Name": name}
     user_data.append(user_details)
@@ -44,10 +44,10 @@ def submit():
 
     print("User Data:", user_data)
 
-    return redirect(url_for('redirect_to_bot'))
+    return redirect(url_for('redirect_to_youtube'))
 
-@app.route('/redirect_to_bot')
-def redirect_to_bot():
+@app.route('/redirect_to_youtube')
+def redirect_to_youtube():
     return redirect("http://localhost:8501")
 
 # Expose an endpoint to get user details as JSON

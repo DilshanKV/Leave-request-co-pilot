@@ -64,13 +64,9 @@ def get_user_details():
 user_details = get_user_details()
 
 try:
+  reporting_person = reporting_person
   employee_id = int(user_details[-1]['Employee ID'])
   employee_name = user_details[-1]['Name']
-
-  rpd = pd.read_csv('employees.csv')
-  rpd = rpd[rpd['Employee ID'] == employee_id]
-  rp = rpd["RP"]
-  reporting_person = rp.values[0]
 
 
   # Get the current date and time
@@ -88,9 +84,9 @@ try:
   def leave_insights(employee_id,leave_data,leave_allocation):
       filtered_df = leave_data[leave_data['Employee ID'] == employee_id]
       merged_df = pd.merge(leave_allocation,filtered_df, left_on='LeaveTypeCode', right_on='Leave Type',how='left')
-      result_df = merged_df.groupby('LeaveTypeName')['No Days Used'].sum().reset_index()
+      result_df = merged_df.groupby('LeaveTypeName')['No Days'].sum().reset_index()
       final_df = pd.merge(result_df, leave_allocation, left_on='LeaveTypeName', right_on='LeaveTypeName')
-      new_final_df = final_df[['LeaveTypeName','No Days Used','AllocatedNoOfDays']]
+      new_final_df = final_df[['LeaveTypeName','No Days','AllocatedNoOfDays']]
       return new_final_df
 
   insights = leave_insights(employee_id,leave_data,leave_allocation)
@@ -99,7 +95,7 @@ try:
 
   for index, row in insights.iterrows():
       leave_type = row['LeaveTypeName']
-      actual_days = row['No Days Used']
+      actual_days = row['No Days']
       allocated_days = row['AllocatedNoOfDays']
 
       if actual_days <= allocated_days:
@@ -128,7 +124,7 @@ try:
 
 
   prompt = """
-  You are a friendly leave request copilot.your job is to capture the following details from the user.
+  You are a friendly leave request copilot.your job is tocapture the following details from the user and give them as a Jason file.
   extract the following information one after another and get confirmed by the user.
 
   1.Leave type (these are the only leave types available. Annual leave, Casual leave, Lieu Leave, Maternity leave, Medical leave)
@@ -139,11 +135,8 @@ try:
   6.HalfDay (This is for half day leave)
   7.Reason for leave (brief explanation)
   8.Description (optional, for additional details)
-
-  When you ask question from the user do not include the leave balance,reporting person's name in the question.
-
-  generate remark using above data as following if user said all the extracted data are correct.
-  example For a full day leave:'Dear [reporting person],I am writing to request leave from [Starting date] to [Ending date] due to [reason for leave].
+  9. generate remark using above data as following example
+  For a full day leave:'Dear [reporting person],I am writing to request leave from [Starting date] to [Ending date] due to [reason for leave].
   I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. 
   I will also make sure to provide any necessary handovers to my colleagues.Thank you for considering my request. 
   I look forward to your approval.'
@@ -151,9 +144,9 @@ try:
   For a half day leave:'Dear [Recipient's Name],I am writing to request half-day leave on [Starting date] due to [reason for leave]. 
   I would like to take leave for [halfday] of the day.I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. 
   Thank you for considering my request. I look forward to your approval.'
-  Example extraction for Full Day Leave:
+  Example JSON Format for Full Day Leave:
   {{  \"Leave Type\": \"Annual Leave\",  \"From\": \"2023-09-06\",  \"To\": \"2023-09-10\",  \"No Days\": 5,  \"FullDay\": \"Full Day\",  \"HalfDay\": None,  \"Leave Reason\": \"Wedding\",  \"Remark\":'Dear Dilshan Kavinda,I am writing to request leave from 2023-09-06 to 2023-09-10 due to a Wedding.I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.'}} 
-  Example extraction for Half Day Leave:
+  Example JSON Format for Half Day Leave:
   {{  \"Leave Type\": \"Casual Leave\",  \"From\": \"2023-09-06\",  \"To\": \"2023-09-06\",  \"No Days\": 0.5,  \"FullDay\": None,  \"HalfDay\": \"1st Half\",  \"Leave Reason\": \"Family Need\",  \"Remark\":'Dear Dilshan Kavinda,I am writing to request half-day leave on 2023-09-06 due to personal reasons. I would like to take leave for first half of the day.I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.'}}
 
   If any information is missing or unclear, prompt the user again for specific details
@@ -163,7 +156,7 @@ try:
   Only extract what exactly is in the user request.
   You respond in a short, very conversational friendly style.
 
-  Once you extracted the data ask user to confirm all the extracted data are true."""
+  Once you create the json ask user to save the leave request.To do that ask user to type 'SAVE'."""
 
   history = [
     {
@@ -172,7 +165,7 @@ try:
     },
     {
       "role": "model",
-      "parts": ["Sure, I can help you with that. Here's the information I need from you to complete the leave request:\n\n1. Leave Type:\n2. Starting Date (YYYY-MM-DD):\n3. Ending Date (YYYY-MM-DD):\n4. No of Days:\n5. Full Day (Full Day/None):\n6. Half Day (1st Half/2nd Half/None):\n7. Reason for Leave:\n8. Description (optional):\n\nOnce you provide me with this information, I'll generate the remark for you. Just let me know when you're ready.\n\nPlease provide the above information."]
+      "parts": ["Sure, I can help you with that. Here's the information I need from you to generate the JSON file:\n\n1. Leave Type:\n2. Starting Date (YYYY-MM-DD):\n3. Ending Date (YYYY-MM-DD):\n4. No of Days:\n5. Full Day (Full Day/None):\n6. Half Day (1st Half/2nd Half/None):\n7. Reason for Leave:\n8. Description (optional):\n\nOnce you provide me with this information, I'll generate a JSON file and a remark for you. Just let me know when you're ready.\n\nPlease provide the above information."]
     },
     {
       "role": "user",
@@ -180,7 +173,7 @@ try:
     },
     {
       "role": "model",
-      "parts": ["Thank you for providing the current date.Here's the information I need from you to complete the leave request:\n\n1. Leave Type:\n2. Starting Date (YYYY-MM-DD):\n3. Ending Date (YYYY-MM-DD):\n4. No of Days:\n5. Full Day (Full Day/None):\n6. Half Day (1st Half/2nd Half/None):\n7. Reason for Leave:\n8. Description (optional):\n\nOnce you provide me with this information, I'll generate the remark for you. Just let me know when you're ready.\n\nPlease provide the above information."]
+      "parts": ["Thank you for providing the current date.Here's the information I need from you to generate the JSON file:\n\n1. Leave Type:\n2. Starting Date (YYYY-MM-DD):\n3. Ending Date (YYYY-MM-DD):\n4. No of Days:\n5. Full Day (Full Day/None):\n6. Half Day (1st Half/2nd Half/None):\n7. Reason for Leave:\n8. Description (optional):\n\nOnce you provide me with this information, I'll generate a JSON file and a remark for you. Just let me know when you're ready.\n\nPlease provide the above information."]
     },
     {
       "role": "user",
@@ -209,12 +202,11 @@ try:
 
   st.subheader('I am your leave request co-pilot')
 
-  st.dataframe(insights)
+  st.success(text_insights)
   # st.chat_message("assistant").markdown("Hi, How may I assit with you today?")
 
   prompt_parts = [
-    f"{text_insights} give some recommendations using this context.summarize those recommendations for 5 points. \
-        Also give some strenths and weeknesses related to this.",
+    f"{text_insights} give some recommendations using this context.summarize those recommendations for 5-10 points.",
   ]
 
   response = model.generate_content(prompt_parts)
@@ -241,7 +233,7 @@ try:
             json_end = input_string.rfind('}')
             json_data = input_string[json_start:json_end + 1]
 
-            # Load JSON data into a Python dictionary
+                # Load JSON data into a Python dictionary
             leave_data_row = json.loads(json_data)
 
 
@@ -303,34 +295,6 @@ try:
         # Display last 
         with st.chat_message("assistant"):
             st.markdown(response.text)
-
-#########################################################################################################
-
-      final_message = st.session_state.chat.history[7:]
-      #input_string = final_message.parts[0].text
-      conv = ""
-
-      for message in final_message:
-        if message.role == 'model':
-            conv = conv + message.role + ' : ' + message.parts[0].text + ' '
-        if message.role == 'user':
-            conv = conv + message.role + ' : ' + message.parts[0].text + ' '
-         
-      
-      prompt_parts2 = [
-        f"{conv} based on the conversation between model and user, \
-            if the user have said 'confirm' or 'ok' or 'fine' or 'good' within the conversation(only the user said it) then \
-            just give one word answer whether it confirmed or not by the user.",
-        ]
-
-      response2 = model.generate_content(prompt_parts2)
-
-      print(current_date_time)
-      print(response2.text)
-      print('*'*50)
-
-################################################################################################################
-
 
 except:
    st.warning("Please login to the system")

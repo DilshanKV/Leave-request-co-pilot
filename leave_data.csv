@@ -1,9 +1,42 @@
-﻿leave_id,employee_id,leave_type,start_day,end_day,no_of_leave_days
-1,1,1,1/7/2024,1/7/2024,1
-2,2,3,1/2/2024,1/5/2024,4
-3,2,3,1/6/2024,1/7/2024,2
-4,2,2,1/12/2024,1/15/2024,4
-5,2,3,1/17/2024,1/17/2024,1
-6,3,3,1/7/2024,1/7/2024,1
-8,3,2,1/15/2024,1/18/2024,4
-9,3,2,1/17/2024,1/20/2024,4
+Leave Type,From,To,No Days Used,FullDay,HalfDay,Leave Reason,Remark,Leave ID,Employee ID
+5,2/6/2024,2/6/2024,1,Full Day,None,Cold,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-02-06 due to a cold. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.",1,1
+2,2/7/2024,2/7/2024,1,Full Day,None,Exam,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-02-07 due to an exam. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.",2,1
+1,2/10/2024,2/10/2024,1,Full Day,None,Wedding,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-02-10 due to a wedding. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.",3,2
+5,2/6/2024,2/6/2024,1,Full Day,None,Cold,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-02-06 due to a cold. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.",4,2
+5,2/7/2024,2/7/2024,1,Full Day,None,Cold,"Dear Dilshan Kavinda,
+
+I am writing to request medical leave for today, 2024-02-07, due to a cold. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. I will also make sure to provide any necessary handovers to my colleagues.
+
+Thank you for considering my request. I look forward to your approval.",5,3
+1,3/1/2024,3/1/2024,1,Full Day,None,Personal Matter,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-03-01 due to a personal matter. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.",6,2
+2,2/9/2024,2/9/2024,1,Full Day,None,Exam,"Dear Dilshan Kavinda,
+
+I am writing to request casual leave on 2024-02-09 due to an exam. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.",7,2
+5,2/7/2024,2/7/2024,1,Full Day,None,Cold,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-02-07 due to a cold. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure.
+
+Thank you for considering my request. I look forward to your approval.",8,1
+5,2/7/2024,2/7/2024,1,Full Day,None,Cold,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-02-07 due to a cold. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure.
+
+Thank you for considering my request. I look forward to your approval.",9,1
+5,2/8/2024,2/8/2024,1,Full Day,None,Fever,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-02-08 due to a fever. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure.
+
+Thank you for considering my request. I look forward to your approval.",10,1
+1,2/8/2024,2/8/2024,1,Full Day,None,Test,"Dear Dilshan Kavinda,
+
+I am writing to request leave on 2024-02-08 due to a test. I understand the importance of my responsibilities and will ensure that my work is up to date before my departure. Thank you for considering my request. I look forward to your approval.",11,1

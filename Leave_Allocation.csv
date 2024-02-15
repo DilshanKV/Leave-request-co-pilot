@@ -1,6 +1,6 @@
 ﻿LeaveTypeCode,LeaveTypeName,SystemLeaveTypeCode,AllocatedNoOfDays
 1,ANNUAL,ANN,10
 2,CASUAL,CAS,10
-3,MEDICAL,MED,10
-4,Lieu Leave,LIEU,10
-5,MATERNITY,MAT,10
+3,Lieu Leave,LIEU,10
+4,MATERNITY,MAT,10
+5,MEDICAL,MED,10
